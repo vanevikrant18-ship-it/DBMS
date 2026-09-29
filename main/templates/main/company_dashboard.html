@@ -1,0 +1,324 @@
+{% extends "main/base.html" %}
+
+{% block navbar %}
+<div class="navbar">
+    <h1>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:8px;">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Company Dashboard
+    </h1>
+    <a href="/logout/">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:5px;">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Logout
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+        background: linear-gradient(135deg, #5c0a0a, #8b1a1a);
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        box-shadow: 0 2px 12px rgba(92,10,10,0.35);
+    }
+
+    .navbar h1 {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: white;
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        background: rgba(255,255,255,0.15);
+        padding: 8px 18px;
+        border-radius: 6px;
+        font-size: 14px;
+        border: 1px solid rgba(255,255,255,0.25);
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .navbar a:hover {
+        background: rgba(255,255,255,0.28);
+    }
+
+    .card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 28px 30px;
+        box-shadow: 0 2px 16px rgba(92,10,10,0.08);
+        margin-bottom: 28px;
+        border: 1px solid #f5e6e6;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 22px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid #fdf0f0;
+    }
+
+    .card-header .icon-box {
+        background: linear-gradient(135deg, #5c0a0a, #8b1a1a);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .card-header .icon-box svg {
+        stroke: white;
+    }
+
+    .card-header h2 {
+        color: #5c0a0a;
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 13px;
+        color: #5c0a0a;
+        display: block;
+        margin-bottom: 5px;
+        margin-top: 4px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        border: 1.5px solid #f0d5d5;
+        border-radius: 7px;
+        font-size: 14px;
+        color: #2a0a0a;
+        background: #fff8f8;
+        transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #8b1a1a;
+        box-shadow: 0 0 0 3px rgba(139,26,26,0.1);
+        background: #fff;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 90px;
+    }
+
+    button {
+        background: linear-gradient(135deg, #5c0a0a, #8b1a1a);
+        color: white;
+        border: none;
+        padding: 11px 28px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        transition: opacity 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    button:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    thead tr {
+        background: linear-gradient(135deg, #5c0a0a, #8b1a1a);
+    }
+
+    th {
+        color: white;
+        padding: 12px 14px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.3px;
+    }
+
+    th:first-child { border-radius: 7px 0 0 0; }
+    th:last-child  { border-radius: 0 7px 0 0; }
+
+    td {
+        padding: 11px 14px;
+        border-bottom: 1px solid #faeaea;
+        color: #3d0a0a;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover td {
+        background: #fff4f4;
+    }
+
+    .empty-msg {
+        color: #c08080;
+        font-size: 14px;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .company-name-highlight {
+        color: #8b1a1a;
+        font-weight: 700;
+    }
+</style>
+
+<!-- Company Profile Card -->
+<div class="card">
+    <div class="card-header">
+        <div class="icon-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/>
+                <line x1="12" y1="12" x2="12" y2="16"/>
+                <line x1="10" y1="14" x2="14" y2="14"/>
+            </svg>
+        </div>
+        <h2>Company Profile</h2>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Company Name
+        </label>
+        <input name="company_name" value="{{ company.company_name }}" required>
+
+        <label>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+            </svg>
+            Required Skills
+        </label>
+        <textarea name="required_skills">{{ company.required_skills }}</textarea>
+
+        <label>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            Qualification Required
+        </label>
+        <input name="qualification_required" value="{{ company.qualification_required }}">
+
+        <button type="submit">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Update Profile
+        </button>
+    </form>
+</div>
+
+<!-- Scheduled Interviews Card -->
+<div class="card">
+    <div class="card-header">
+        <div class="icon-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+        </div>
+        <h2>
+            Interviews Scheduled for
+            <span class="company-name-highlight">{{ company.company_name }}</span>
+        </h2>
+    </div>
+
+    {% if interviews %}
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:5px;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Student Username
+                    </th>
+                    <th>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:5px;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Interview Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in interviews %}
+                <tr>
+                    <td>{{ i.student.user.username }}</td>
+                    <td>{{ i.interview_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="empty-msg">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            No interviews scheduled for your company yet.
+        </p>
+    {% endif %}
+</div>
+
+{% endblock %}
